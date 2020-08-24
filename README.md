@@ -1,5 +1,5 @@
 # OCR with SAP Leonardo
-This project 
+This project is a simple example project to illustrate how the OCR service can be used. 
 
 ## Set Up
 1. Install Node Modules
