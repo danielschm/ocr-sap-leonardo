@@ -1,0 +1,131 @@
+<mvc:View
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		xmlns:u="sap.ui.unified"
+		xmlns:form="sap.ui.layout.form"
+		xmlns:core="sap.ui.core"
+		controllerName="app.application.main">
+	<Page>
+		<customHeader>
+			<Toolbar>
+				<Title text="OCR SAP Leonardo"/>
+				<ToolbarSpacer/>
+				<Link text="Get API Key" target="_blank" href="https://api.sap.com/"/>
+			</Toolbar>
+		</customHeader>
+		<content>
+			<form:Form title="File Upload" editable="true">
+				<form:layout>
+					<form:ResponsiveGridLayout
+							adjustLabelSpan="false"
+							labelSpanXL="3"
+							labelSpanL="3"
+							emptySpanXL="3"
+							emptySpanL="3"/>
+				</form:layout>
+				<form:formContainers>
+					<form:FormContainer>
+						<form:formElements>
+							<form:FormElement label="API Key">
+								<form:fields>
+									<Input value="{/apiKey}"/>
+									<Button text="Save" press="saveAPIKey"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Output Type">
+								<form:fields>
+									<Select selectedKey="{/outputType}">
+										<core:Item text="Plain Text" key="txt"/>
+										<core:Item text="XML" key="xml"/>
+									</Select>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Language">
+								<form:fields>
+									<Select selectedKey="{/language}">
+										<core:Item text="English" key="en"/>
+										<core:Item text="German" key="de"/>
+									</Select>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="File">
+								<form:fields>
+									<u:FileUploader id="fileUploader" sendXHR="true" uploadUrl="{/service}" uploadComplete="handleUploadComplete">
+										<u:headerParameters>
+											<u:FileUploaderParameter name="APIKey" value="{/apiKey}"/>
+										</u:headerParameters>
+										<u:parameters>
+											<u:FileUploaderParameter name="options" value="{parts: ['/language', '/outputType'], formatter: '.getOptions'}"/>
+										</u:parameters>
+									</u:FileUploader>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Raw Response">
+								<TextArea growing="true" growingMaxLines="5" rows="5" editable="false" value="{/predictedText}"/>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+				</form:formContainers>
+			</form:Form>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button type="Emphasized" text="Submit" press="submit" busy="{/loading}"/>
+			</Toolbar>
+			<form:Form title="Result" editable="true">
+				<form:layout>
+					<form:ResponsiveGridLayout
+							adjustLabelSpan="false"
+							labelSpanXL="3"
+							labelSpanL="3"
+							emptySpanXL="3"
+							emptySpanL="3"/>
+				</form:layout>
+				<form:formContainers>
+					<form:FormContainer>
+						<form:formElements>
+							<form:FormElement label="Contract Number">
+								<form:fields>
+									<Input value="{parsed>/contractNumber}" editable="false"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Condition Type">
+								<form:fields>
+									<Input value="{parsed>/conditionType}" editable="false"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Condition Value">
+								<form:fields>
+									<Input textAlign="End"
+										   value="{ parts: [{path: 'parsed>/conditionValue'}, {path: 'parsed>/currencyCode'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false } }"
+										   description="{parsed>/agrmtUnit}"
+										   editable="false"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Article">
+								<form:fields>
+									<Input value="{parsed>/article}" editable="false"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Reference Base">
+								<form:fields>
+									<Input textAlign="End"
+										   value="{ parts: [{path: 'parsed>/referenceBase'}, {path: 'parsed>/currencyCode'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false } }"
+										   description="{parsed>/currencyCode}"
+										   editable="false"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement label="Net Amount">
+								<form:fields>
+									<Input textAlign="End"
+										   value="{ parts: [{path: 'parsed>/netAmount'}, {path: 'parsed>/currencyCode'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false } }"
+										   description="{parsed>/currencyCode}"
+										   editable="false"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+				</form:formContainers>
+			</form:Form>
+		</content>
+	</Page>
+</mvc:View>
